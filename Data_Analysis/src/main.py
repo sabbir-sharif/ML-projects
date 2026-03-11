@@ -29,14 +29,21 @@ uploaded_file = st.file_uploader("Upload Earthquake Data (CSV)", type=["csv"])
 def load_and_process_data(uploaded_file):
     # Step 1: Load the data
     df = pd.read_csv(uploaded_file)
+    
+
+    # st.write("Raw Data Shape:", df.shape) -> debugging line
+    # st.write(df.head())
 
     # Step 2: Process the data
     # 2.1: Convert 'time' column to datetime format, handle errors by coercing into NaT (Not a Time)
     df['time'] = pd.to_datetime(
-        df['time'], format='%d-%m-%Y %H:%M:%S', errors='coerce'
-        )
+        df['time'],
+        format='%Y-%m-%d %H:%M:%S.%f',
+        errors='coerce'
+    )
     # 2.2: Drop rows where 'time' value is missing
     df = df.dropna(subset=['time'])
+    # st.write("After time cleaning:", df.shape)
 
     # 2.3: Time feature engineering - extract year, month, date, hour, day of week
     df['year'] = df['time'].dt.year
@@ -44,6 +51,7 @@ def load_and_process_data(uploaded_file):
     df['date'] = df['time'].dt.date
     df['hour'] = df['time'].dt.hour
     df['day_of_week'] = df['time'].dt.day_name()
+    # st.write("After feature engineering:", df.shape)
 
     # 2.4: Create a 'risk_level' column based on magnitude thresholds
     df['risk_level'] = pd.cut(
@@ -53,24 +61,49 @@ def load_and_process_data(uploaded_file):
     )
 
     # 2.5: Create a 'tectonic_type' column based on depth thresholds
-    df['tectonic_type'] = df.where(
+    df['tectonic_type'] = np.where(
         df['depth'] < 70, 'Crustal',
-        df.where(
+        np.where(
             df['depth'] < 300, 'Intermediate', 'Deep'
         )
     )
 
     # 2.6: Cluster detection
     df = df.sort_values('time').reset_index(drop=True)
-    df['hourse_since_prev'] = df['time'].diff().dt.total_seconds() / 3600
-    df['hourse_since_next'] = df['hour_since_prev'].fillna(0)
-    df['cluster_flag'] = df['hourse_since_prev'] < 24
+    df['hours_since_prev'] = df['time'].diff().dt.total_seconds() / 3600
+    df['hours_since_prev'] = df['hours_since_prev'].fillna(0)
+    df['cluster_flag'] = df['hours_since_prev'] < 24
 
+
+    # st.write("Raw Data Shape:", df.shape)
+    # st.write(df.head())
     return df
 
 if uploaded_file is not None:
     st.markdown("File uploaded successfully! Processing data...")
     # Data Frame Creation
-    df = load_and_process_data(uploaded_file)
-    df.head()
+    with st.spinner("Loading and processing data..."):
+        df = load_and_process_data(uploaded_file)
     
+
+    # Executive Summary
+    st.markdown("----")
+    st.header("Executive Summary")
+    col1, col2, col3, col4, col5 = st.columns(5)
+
+    total_events = len(df)
+    critical_events = len(df[df['risk_level'] == 'Critical'])
+    recent_24h = len(df[df['time'] >= (df['time'].max() - timedelta(hours=24))])
+    avg_mag = df['magnitude'].mean()
+    max_mag = df['magnitude'].max()
+
+    with col1:
+        st.metric("Total Events", total_events)
+    with col2:
+        st.metric("Critical Events", critical_events)
+    with col3:
+        st.metric("Events in Last 24h", recent_24h)
+    with col4:
+        st.metric("Average Magnitude", f"{avg_mag:.2f}")
+    with col5:
+        st.metric("Max Magnitude", f"{max_mag:.2f}")
