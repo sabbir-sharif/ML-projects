@@ -125,3 +125,25 @@ if uploaded_file is not None:
             )
     else:
         st.success("No high-risk events in the last 24 hours.")
+    
+    # Sidebar Filters
+    st.sidebar.header("Filters")
+
+    # Time Range Filter
+    time_window = st.sidebar.selectbox(
+        "Time Window",
+        ["All Time", "Last 7 Days", "Last 30 Days", "Last 90 Days", "Custom"]
+    )
+
+    if time_window == "Custom":
+        start_date = st.sidebar.date_input("Start", df['date'].min())
+        end_date = st.sidebar.date_input("End", df['date'].max())
+        filter_df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+    else:
+        days = {
+            "All Time": 99999,
+            "Last 7 Days": 7,
+            "Last 30 Days": 30,
+            "Last 90 Days": 90
+        }
+        cutoff = df['time'].max() - timedelta(days=days[time_window])
