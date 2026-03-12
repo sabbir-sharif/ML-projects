@@ -107,3 +107,21 @@ if uploaded_file is not None:
         st.metric("Average Magnitude", f"{avg_mag:.2f}")
     with col5:
         st.metric("Max Magnitude", f"{max_mag:.2f}")
+
+    # Alert System
+    st.markdown("----")
+    st.header("Alert System")
+
+    now = datetime.now()
+    recent_events = df[df['time'] >= (now - timedelta(hours=24))]
+    alert_df = recent_events[recent_events['magnitude'] >= 4.5].copy()
+    alert_df['time_ago'] = (now - alert_df['time']).dt.total_seconds() / 3600
+
+    if len(alert_df) > 0:
+        st.error(f"High-risk events in last 24 hours:{len(alert_df)}")
+        for _, row in alert_df.head(6).iterrows():
+            st.warnings(
+                f"**Magnitude {row['magnitude']:.1f}** earthquake at **{row['place'][:50]} | ({row['time_ago']:.1f} hours ago)"
+            )
+    else:
+        st.success("No high-risk events in the last 24 hours.")
