@@ -25,7 +25,7 @@ st.markdown(
 
 # Load Data
 uploaded_file = 1
-file_path = "../data/Class_10_eq_catalog.csv"
+data_path = (Path(__file__).resolve().parent / ".." / "data" / "Class_10_eq_catalog.csv").resolve()
 
 # Data frame creation and processing function
 def load_and_process_data(uploaded_file):
@@ -84,7 +84,7 @@ def load_and_process_data(uploaded_file):
 if uploaded_file is not None:
     # st.markdown("Uploaded file successfully.")
     with st.spinner('Loading data...'):
-        df = load_and_process_data(file_path)
+        df = load_and_process_data(data_path)
     
     # Sidebar Filters
     st.sidebar.header("Filters")
