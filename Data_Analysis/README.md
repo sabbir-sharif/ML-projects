@@ -32,6 +32,50 @@ The **Earthquake Decision Support Dashboard** provides tools for:
 The dashboard integrates **data preprocessing, feature engineering, interactive visualizations, and decision support logic** into a single analytical platform.
 
 ---
+# 📷 Dashboard Preview
+
+## 1️⃣ Executive Summary
+
+<p align="center">
+  <img src="images/img1.png" width="900">
+</p>
+
+<p align="center">
+  <em>
+  Executive summary providing key earthquake metrics including total events, critical events, 
+  events in the last 24 hours, and magnitude statistics.
+  </em>
+</p>
+
+---
+
+## 2️⃣ Risk Level Distribution
+
+<p align="center">
+  <img src="images/img3.png" width="900">
+</p>
+
+<p align="center">
+  <em>
+  Pie chart showing the distribution of earthquake risk levels categorized as 
+  Low, Moderate, High, and Critical based on magnitude thresholds.
+  </em>
+</p>
+
+## 3️⃣ Daily Earthquake Rate
+
+<p align="center">
+  <img src="images/img2.png" width="900">
+</p>
+
+<p align="center">
+  <em>
+  Time-series visualization of daily earthquake occurrences highlighting seismic activity trends 
+  and average event frequency.
+  </em>
+</p>
+
+---
 
 # ✨ Key Features
 
@@ -169,9 +213,44 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
-run:
 streamlit run src/main.py
 
-open in browser:
 http://localhost:8501
 ```
+
+
+---
+
+
+## 💡 Skills Demonstrated
+
+This project highlights expertise in:
+
+- **Data Cleaning**
+- **Feature Engineering**
+- **Exploratory Data Analysis (EDA)**
+- **Interactive Data Visualization**
+- **Geospatial Data Analysis**
+- **Dashboard Development**
+- **Decision Support Systems**
+- **Python Data Stack**
+
+---
+
+## 🔮 Future Improvements
+
+Potential enhancements for this project:
+
+- Integrate **real-time earthquake data APIs**
+- Implement **machine learning models for earthquake risk prediction**
+- Apply **advanced clustering algorithms (DBSCAN / K-Means)**
+- Add **time-series forecasting for seismic activity trends**
+
+---
+
+## 👨‍💻 Author
+
+**Sabbir Sharif**
+- [GitHub](https://github.com/sabbir-sharif)
+- [LinkedIn](https://www.linkedin.com/in/sabbir-sharif-066909160/)
+- [Email](mailto:sabbirshariff2001@gmail.com)
