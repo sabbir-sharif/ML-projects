@@ -25,7 +25,7 @@ st.markdown(
 
 # Load Data
 uploaded_file = 1
-data_path = (Path(__file__).resolve().parent / ".." / "data" / "Class_10_eq_catalog.csv").resolve()
+data_path = (Path(__file__).resolve().parent / ".." / "data" / "eq_catalog.csv").resolve()
 
 # Data frame creation and processing function
 def load_and_process_data(uploaded_file):
